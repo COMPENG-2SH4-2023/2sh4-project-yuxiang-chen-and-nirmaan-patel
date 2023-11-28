@@ -92,25 +92,28 @@ void Player::movePlayer()
         default:
             break;
         }
-
-    if (playerPos.x>18)//Sean: Can change later, depending on board size.
+//wraparound here
+    int x_wrap, y_wrap;
+    x_wrap=mainGameMechsRef->getBoardSizeX()-2;
+    y_wrap=mainGameMechsRef->getBoardSizeY()-2;
+    if (playerPos.x>x_wrap)//Sean: Can change later, depending on board size.--mainGameMechsRef->getBoardSizeY()-2
     {
-        playerPos.x=playerPos.x%18;
+        playerPos.x=playerPos.x%x_wrap;
     }
 
     if (playerPos.x<1)
     {
-        playerPos.x=playerPos.x+18;
+        playerPos.x=playerPos.x+x_wrap;
     }
 
-    if (playerPos.y>8)
+    if (playerPos.y>y_wrap)
     {
-        playerPos.y=playerPos.y%8;
+        playerPos.y=playerPos.y%y_wrap;
     }
 
     if (playerPos.y<1)
     {
-        playerPos.y=playerPos.y+8;
+        playerPos.y=playerPos.y+y_wrap;
     }
 }
 

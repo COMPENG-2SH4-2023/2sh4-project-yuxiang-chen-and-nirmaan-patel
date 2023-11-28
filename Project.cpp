@@ -69,6 +69,57 @@ void DrawScreen(void)
     MacUILib_printf("Test key pressed: %c\n",myGM->getInput());
     //MacUILib_printf("%c\n",myPlayer->getInput());
     //MacUILib_printf("x:%d-y:%d\n",tempPos.x,tempPos.y);
+    //MacUILib_printf("Board Size: %d-%d\nPlayer Position <%d-%d>\nSymbol-%c\n", myGM->getBoardSizeX(),myGM->getBoardSizeY(),tempPos.x,tempPos.y,tempPos.symbol);
+    int x_wrap, y_wrap;
+    x_wrap=myGM->getBoardSizeX();
+    y_wrap=myGM->getBoardSizeY();
+    
+    for (int i=0; i < y_wrap; i++)
+    {
+        for (int j=0; j < x_wrap; j++)
+        {
+            if(j == 0 || j == x_wrap-1 || i == 0 || i == y_wrap-1)
+            {
+                MacUILib_printf("#");
+            }
+
+            else if ((j == tempPos.x) && (i == tempPos.y))
+            {
+                MacUILib_printf("%c", tempPos.symbol);
+            }
+
+            else
+            {
+                MacUILib_printf(" ");
+            }
+
+        }
+        MacUILib_printf("\n");
+    }
+
+    //     for (int i=0; i < 15; i++)
+    // {
+    //     for (int j=0; j < 30; j++)
+    //     {
+    //         if(j == 0 || j == 29 || i == 0 || i == 14)
+    //         {
+    //             MacUILib_printf("#");
+    //         }
+
+    //         else if ((j == tempPos.x) && (i == tempPos.y))
+    //         {
+    //             MacUILib_printf("%c", tempPos.symbol);
+    //         }
+
+    //         else
+    //         {
+    //             MacUILib_printf(" ");
+    //         }
+
+    //     }
+    //     MacUILib_printf("\n");
+    // }
+
 }
 
 void LoopDelay(void)
