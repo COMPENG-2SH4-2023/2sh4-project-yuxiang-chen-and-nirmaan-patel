@@ -32,17 +32,21 @@ class GameMechs
         
         bool getExitFlagStatus();
         bool getLoseFlagStatus();
+
         void setExitTrue();
+        void setExitFalse();
+        void setInput(char this_input);
+        void setLoseFlag();
 
         char getInput();
         char getScore();
-        void setInput(char this_input);
+        
         void clearInput();
 
         int getBoardSizeX();
         int getBoardSizeY();
 
-        void setLoseFlag();
+        
         void incrementScore();
       
 

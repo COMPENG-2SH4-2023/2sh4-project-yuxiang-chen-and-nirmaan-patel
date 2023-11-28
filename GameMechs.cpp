@@ -2,7 +2,7 @@
 #include "MacUILib.h"//new_CFO
 GameMechs::GameMechs()
 {
-    input=MacUILib_getChar(); 
+    input=0; 
     exitFlag=false;
     loseFlag=false;
     score=0;
@@ -12,7 +12,7 @@ GameMechs::GameMechs()
 
 GameMechs::GameMechs(int boardX, int boardY)
 {
-    input=MacUILib_getChar(); 
+    input=0; 
     exitFlag=false;
     loseFlag=false;
     score=0;
@@ -36,6 +36,11 @@ bool GameMechs::getLoseFlagStatus()
 
 char GameMechs::getInput()
 {
+    if (MacUILib_hasChar())
+    {
+        input = MacUILib_getChar();
+    }
+    
     return input;
 }
 
@@ -58,6 +63,11 @@ int GameMechs::getBoardSizeY()
 void GameMechs::setExitTrue()
 {
     exitFlag=true;
+}
+
+void GameMechs::setExitFalse()
+{
+    exitFlag=false;
 }
 
 void GameMechs::setLoseFlag()
