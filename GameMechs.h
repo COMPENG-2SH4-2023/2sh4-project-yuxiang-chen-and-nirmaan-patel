@@ -12,7 +12,7 @@ using namespace std;
 
 class GameMechs
 {
-    // Construct the remaining declaration from the project manual.
+    // Construct the  remaining declaration from the project manual.
 
     // Only some sample members are included here
 
@@ -25,6 +25,8 @@ class GameMechs
         int score;
         int boardSizeX;
         int boardSizeY;
+        
+        objPos foodPos;
 
     public:
         GameMechs();
@@ -39,17 +41,18 @@ class GameMechs
         void setLoseFlag();
 
         char getInput();
-        char getScore();
-        
+        int getScore();
+
         void clearInput();
 
         int getBoardSizeX();
         int getBoardSizeY();
 
-        
         void incrementScore();
-      
 
+        void generateFood(objPosArrayList* blockOff);
+        void getFoodPos(objPos &returnPos);
+      
 };
 
 #endif

@@ -8,6 +8,8 @@ GameMechs::GameMechs()
     score=0;
     boardSizeX=20;
     boardSizeY=10;
+
+    foodPos.setObjPos(-1, -1, 'o');
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -18,9 +20,11 @@ GameMechs::GameMechs(int boardX, int boardY)
     score=0;
     boardSizeX=boardX;
     boardSizeY=boardY;
+
+    foodPos.setObjPos(-1, -1, 'o');
 }
 
-// do you need a destructor?_CFO
+// do you need a destruct or?_CFO
 
 
 
@@ -44,7 +48,7 @@ char GameMechs::getInput()
     return input;
 }
 
-char GameMechs::getScore()
+int GameMechs::getScore()
 {
     return score;
 }
@@ -90,3 +94,41 @@ void GameMechs::incrementScore()
     score++;
 }
 
+void GameMechs::generateFood(objPosArrayList* blockOff)
+{
+        int xRange = boardSizeX;
+        int yRange = boardSizeY;
+        // int flag;
+        // flag = 0;
+        // int count = 0;
+        bool flagy=true;
+        objPos tempBody;
+        while (flagy)
+        {
+            srand(time(NULL));
+            int myRandomX = (rand() % (xRange-2)) + 1;
+            int myRandomY = (rand() % (yRange-2)) + 1;
+            for (int k = 0; k < blockOff->getSize(); k++)
+            {
+                blockOff->getElement(tempBody,k);
+                if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
+                {
+                    // flagy=false;
+                    break;
+                } 
+                flagy=false;  
+            }
+            if (flagy==false)
+            {
+                foodPos.x = myRandomX;
+                foodPos.y = myRandomY;
+                
+            }
+        }
+        
+}
+
+void GameMechs::getFoodPos(objPos &returnPos)
+{
+    returnPos.setObjPos(foodPos.x, foodPos.y, foodPos.symbol);
+}
