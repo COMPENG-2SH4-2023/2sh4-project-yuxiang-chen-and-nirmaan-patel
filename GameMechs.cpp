@@ -95,7 +95,8 @@ void GameMechs::incrementScore()
 }
 
 void GameMechs::generateFood(objPosArrayList* blockOff)
-{
+{       
+        srand(time(NULL));
         int xRange = boardSizeX;
         int yRange = boardSizeY;
         // int flag;
@@ -105,7 +106,7 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
         objPos tempBody;
         while (flagy)
         {
-            srand(time(NULL));
+            // srand(time(NULL));
             int myRandomX = (rand() % (xRange-2)) + 1;
             int myRandomY = (rand() % (yRange-2)) + 1;
             for (int k = 0; k < blockOff->getSize(); k++)
@@ -113,10 +114,14 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
                 blockOff->getElement(tempBody,k);
                 if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
                 {
-                    // flagy=false;
+                    flagy=true;
+                    // int myRandomX = (rand() % (xRange-2)) + 1;
+                    // int myRandomY = (rand() % (yRange-2)) + 1;
+                    // flagy=true; 
                     break;
                 } 
-                flagy=false;  
+                flagy=false;
+                 
             }
             if (flagy==false)
             {
