@@ -2,13 +2,14 @@
 #include "MacUILib.h"//new_CFO
 GameMechs::GameMechs()
 {
-    input=0; 
+    input=0;
     exitFlag=false;
     loseFlag=false;
     score=0;
     boardSizeX=20;
     boardSizeY=10;
-
+    
+    // initialization of food
     foodPos.setObjPos(-1, -1, 'o');
 }
 
@@ -21,11 +22,9 @@ GameMechs::GameMechs(int boardX, int boardY)
     boardSizeX=boardX;
     boardSizeY=boardY;
 
+    // initialization of food
     foodPos.setObjPos(-1, -1, 'o');
 }
-
-// do you need a destruct or?_CFO
-
 
 
 bool GameMechs::getExitFlagStatus()
@@ -84,7 +83,7 @@ void GameMechs::setInput(char this_input)
     input=this_input;
 }
 
-void GameMechs::clearInput()//_CFO
+void GameMechs::clearInput()
 {
     input=0;
 }
@@ -94,36 +93,38 @@ void GameMechs::incrementScore()
     score++;
 }
 
-void GameMechs::generateFood(objPosArrayList* blockOff)
+
+void GameMechs::generateFood(objPosArrayList* blockOff)  // food generation function
 {       
-        srand(time(NULL));
-        int xRange = boardSizeX;
+        srand(time(NULL));           // for random no. generation
+        int xRange = boardSizeX;     // dimensions of board
         int yRange = boardSizeY;
-        // int flag;
-        // flag = 0;
-        // int count = 0;
-        bool flagy=true;
+        
+        bool flagy=true;    // setting boolean value
+
         objPos tempBody;
         while (flagy)
         {
-            // srand(time(NULL));
-            int myRandomX = (rand() % (xRange-2)) + 1;
+            
+            int myRandomX = (rand() % (xRange-2)) + 1;   // generating random no.'s
             int myRandomY = (rand() % (yRange-2)) + 1;
-            for (int k = 0; k < blockOff->getSize(); k++)
+
+            // checking for position of snake to avoid printing food at same location
+
+            for (int k = 0; k < blockOff->getSize(); k++)  
             {
                 blockOff->getElement(tempBody,k);
-                if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
+                if (tempBody.x == myRandomX && tempBody.y == myRandomY)
                 {
-                    flagy=true;
-                    // int myRandomX = (rand() % (xRange-2)) + 1;
-                    // int myRandomY = (rand() % (yRange-2)) + 1;
-                    // flagy=true; 
+                    flagy=true;     // assigning boolean value according to conditions
+                    
                     break;
-                } 
+                }
+
                 flagy=false;
                  
             }
-            if (flagy==false)
+            if (flagy == false)    // assigning food position if no instersection is found
             {
                 foodPos.x = myRandomX;
                 foodPos.y = myRandomY;
@@ -132,6 +133,8 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
         }
         
 }
+
+// function to obtain position of food
 
 void GameMechs::getFoodPos(objPos &returnPos)
 {
