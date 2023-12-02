@@ -17,6 +17,8 @@ class objPosArrayList
         ~objPosArrayList();
 
         int getSize();
+
+        // functions to change the snake's properties
         void insertHead(objPos thisPos);
         void insertTail(objPos thisPos);
         void removeHead();
