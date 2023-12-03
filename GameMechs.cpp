@@ -1,6 +1,9 @@
 #include "GameMechs.h"
-#include "MacUILib.h"//new_CFO
-GameMechs::GameMechs()
+#include "MacUILib.h"
+
+//We used the left hand side method from lab manual and integrated the multi-food arraylist with GameMechs.
+
+GameMechs::GameMechs()   //This is the constructor
 {
     input=0; 
     exitFlag=false;
@@ -9,10 +12,21 @@ GameMechs::GameMechs()
     boardSizeX=20;
     boardSizeY=10;
 
-    foodPos.setObjPos(-1, -1, 'o');
+    objPos tempFood,tempFood1,tempFood2,tempFood3,tempFood4; //initialized more than one food, and their position will later be replaced by random number generations.
+    tempFood.setObjPos(3, 2, 'o');
+    tempFood1.setObjPos(5, 2, 'o');
+    tempFood2.setObjPos(6, 6, 'o');
+    tempFood3.setObjPos(7, 7, 'o');
+    tempFood4.setObjPos(8, 8, 'o');
+    foodBucket=new objPosArrayList();        //Allocated on heap, thus destructor will be needed.
+    foodBucket->insertHead(tempFood);
+    foodBucket->insertHead(tempFood1);
+    foodBucket->insertHead(tempFood2);
+    foodBucket->insertHead(tempFood3);
+    foodBucket->insertHead(tempFood4);
 }
 
-GameMechs::GameMechs(int boardX, int boardY)
+GameMechs::GameMechs(int boardX, int boardY)   //This is the constructor with board size setting available
 {
     input=0; 
     exitFlag=false;
@@ -21,10 +35,26 @@ GameMechs::GameMechs(int boardX, int boardY)
     boardSizeX=boardX;
     boardSizeY=boardY;
 
-    foodPos.setObjPos(-1, -1, 'o');
+    
+    objPos tempFood,tempFood1,tempFood2,tempFood3,tempFood4;    //initialized more than one food, and their position will later be replaced by random number generations.
+    tempFood.setObjPos(3, 2, 'o');
+    tempFood1.setObjPos(5, 2, 'o');
+    tempFood2.setObjPos(6, 6, 'o');
+    tempFood3.setObjPos(7, 7, 'o');
+    tempFood4.setObjPos(8, 8, 'o');
+    foodBucket=new objPosArrayList();        //Allocated on heap, thus destructor will be needed.
+    foodBucket->insertHead(tempFood);
+    foodBucket->insertHead(tempFood1);
+    foodBucket->insertHead(tempFood2);
+    foodBucket->insertHead(tempFood3);
+    foodBucket->insertHead(tempFood4);
 }
 
-// do you need a destruct or?_CFO
+
+GameMechs::~GameMechs()  //This is the destructor
+{
+    delete foodBucket;  // deletion from heap
+}
 
 
 
@@ -84,7 +114,7 @@ void GameMechs::setInput(char this_input)
     input=this_input;
 }
 
-void GameMechs::clearInput()//_CFO
+void GameMechs::clearInput()
 {
     input=0;
 }
@@ -99,14 +129,18 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
         srand(time(NULL));
         int xRange = boardSizeX;
         int yRange = boardSizeY;
-        // int flag;
-        // flag = 0;
-        // int count = 0;
-        bool flagy=true;
+        bool flagy;
+        bool flagy_special=true;
+        int flag;
+        int count=0;
         objPos tempBody;
-        while (flagy)
-        {
-            // srand(time(NULL));
+        objPos tempFood;
+        objPosArrayList* tempFoodlist;
+        
+
+        while (count<4)       
+        {    
+            flagy=false;
             int myRandomX = (rand() % (xRange-2)) + 1;
             int myRandomY = (rand() % (yRange-2)) + 1;
             for (int k = 0; k < blockOff->getSize(); k++)
@@ -115,25 +149,71 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
                 if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
                 {
                     flagy=true;
-                    // int myRandomX = (rand() % (xRange-2)) + 1;
-                    // int myRandomY = (rand() % (yRange-2)) + 1;
-                    // flagy=true; 
                     break;
-                } 
-                flagy=false;
-                 
+                }     
             }
+           
+            
+            for ( int j = 0; j <count; j++)
+            {
+                foodBucket->getElement(tempFood,j);
+                if(tempFood.x==myRandomX&&tempFood.y==myRandomY)
+                {
+                       
+                    flagy=true;
+                    break;   
+                }
+            }
+            
             if (flagy==false)
             {
-                foodPos.x = myRandomX;
-                foodPos.y = myRandomY;
-                
+                tempFood.setObjPos(myRandomX, myRandomY, 'o');
+                foodBucket->insertHead(tempFood);
+                foodBucket->removeTail();
+                count++;
+            }
+            
+        }
+
+        while (flagy_special)
+        {   
+            flagy_special=false;
+            int myRandomX = (rand() % (xRange-2)) + 1;
+            int myRandomY = (rand() % (yRange-2)) + 1;
+            for (int k = 0; k < blockOff->getSize(); k++)
+            {
+                blockOff->getElement(tempBody,k);
+                if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
+                {
+                    flagy_special=true;
+                    break;
+                }     
+            }
+
+            for ( int j = 0; j <count; j++)
+            {
+                foodBucket->getElement(tempFood,j);
+                if(tempFood.x==myRandomX&&tempFood.y==myRandomY)
+                {
+                       
+                    flagy_special=true;
+                    break;   
+                }
+            }
+
+            if (flagy_special==false)
+            {
+                tempFood.setObjPos(myRandomX, myRandomY, '$');
+                foodBucket->insertHead(tempFood);
+                foodBucket->removeTail();
+                count++;
             }
         }
-        
+     
 }
 
-void GameMechs::getFoodPos(objPos &returnPos)
+
+objPosArrayList* GameMechs::getFoodlistPos()
 {
-    returnPos.setObjPos(foodPos.x, foodPos.y, foodPos.symbol);
+    return foodBucket;
 }

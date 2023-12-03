@@ -5,12 +5,9 @@
 #include "Player.h"
 #include "objPosArrayList.h"
 #include <time.h>
-
 using namespace std;
-
 #define DELAY_CONST 100000
 
-//bool exitFlag;
 GameMechs* myGM;
 Player* myPlayer;
 
@@ -20,7 +17,6 @@ void RunLogic(void);
 void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
-
 
 
 int main(void)
@@ -46,16 +42,16 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    myGM=new GameMechs(30,15);
+    myGM=new GameMechs(56,26);
     myPlayer=new Player(myGM);
-    //exitFlag = false;
-        objPosArrayList* playerBody=myPlayer->getPlayerPos(); //24:37
+    
+    objPosArrayList* playerBody=myPlayer->getPlayerPos(); 
     myGM->generateFood(playerBody);
 }
 
 void GetInput(void)
 {
-   
+  
 }
 
 void RunLogic(void)
@@ -67,22 +63,16 @@ void RunLogic(void)
 void DrawScreen(void)
 {
     MacUILib_clearScreen();    
-    objPos tempfood;
-    objPos dummy;
-    dummy=objPos(10,12,'&');
-    // myGM->generateFood(dummy);
-    myGM->getFoodPos(tempfood);
 
-    objPosArrayList* playerBody=myPlayer->getPlayerPos(); //24:37
+    objPosArrayList* tempFoodlist=myGM->getFoodlistPos();
+    objPos temp_food;
+
+    objPosArrayList* playerBody=myPlayer->getPlayerPos(); 
     objPos tempBody;
     bool drawn;
-    // objPos tempPos;
-    // myPlayer->getPlayerPos(tempPos);
-    //MacUILib_printf("Board Size: %d-%d\nPlayer Position <%d-%d>\nSymbol-%c\n", myGM->getBoardSizeX(),myGM->getBoardSizeY(),tempPos.x,tempPos.y,tempPos.symbol);
+    bool drawn_food;
     MacUILib_printf("Your Score: %d\n",myGM->getScore());
-    //MacUILib_printf("%c\n",myPlayer->getInput());
-    //MacUILib_printf("x:%d-y:%d\n",tempPos.x,tempPos.y);
-    //MacUILib_printf("Board Size: %d-%d\nPlayer Position <%d-%d>\nSymbol-%c\n", myGM->getBoardSizeX(),myGM->getBoardSizeY(),tempPos.x,tempPos.y,tempPos.symbol);
+
     int x_wrap, y_wrap;
     x_wrap=myGM->getBoardSizeX();
     y_wrap=myGM->getBoardSizeY();
@@ -103,77 +93,72 @@ void DrawScreen(void)
                     drawn=true;
                     break;
                 }
-                
+                   
             }
+           
             if(drawn) continue;
+             for (int z = 0; z < 5; z++)
+            {
+                tempFoodlist->getElement(temp_food,z);
+                drawn_food=false;
+                if ((j == temp_food.x) && (i == temp_food.y))
+            {   
+                drawn_food=true;
+                MacUILib_printf("%c", temp_food.symbol);
+                break;
+            }
+                
+
+            }
+            if(drawn_food) continue;
             if(j == 0 || j == x_wrap-1 || i == 0 || i == y_wrap-1)
             {
                 MacUILib_printf("#");
             }
-
-
-            else if ((j == tempfood.x) && (i == tempfood.y))
-            {
-                MacUILib_printf("%c", tempfood.symbol);
-            }
-            // else if ((j == tempPos.x) && (i == tempPos.y))
-            //  {
-            //     MacUILib_printf("%c", tempPos.symbol);
-            // }
 
             else
             {
                 MacUILib_printf(" ");
             }
 
-        // MacUILib_printf("%d-%d", tempfood.x, tempfood.y);
-        
         }
         MacUILib_printf("\n");
     }
-    // MacUILib_printf("%d-%d", tempfood.x, tempfood.y);
-    if (myPlayer->checkFoodConsumption())
-    {   
-        myPlayer->increasePlayerLength();
-        //----
-        myGM->incrementScore();
-        //----
+    
+
+    switch (myPlayer->checkFoodConsumption())
+    {
+
+    case 1:
+        for (int t = 0; t < 5; t++)
+        {
+            myGM->incrementScore();
+        }
+        for (int y = 0; y < 2; y++)
+        {
+            myPlayer->increasePlayerLength();
+        }
+        
         myGM->generateFood(playerBody);
-        // MacUILib_printf("=========================================");
+        break;
+
+    case 2:
+        myPlayer->increasePlayerLength();
+        myGM->incrementScore();
+        myGM->generateFood(playerBody);
+        break;
+    
+    default:
+        break;
     }
 
     myPlayer->checkSelfCollision();
-    
-    // myPlayer->checkFoodConsumption();
-
-    //     for (int i=0; i < 15; i++)
-    // {
-    //     for (int j=0; j < 30; j++)
-    //     {
-    //         if(j == 0 || j == 29 || i == 0 || i == 14)
-    //         {
-    //             MacUILib_printf("#");
-    //         }
-
-    //         else if ((j == tempPos.x) && (i == tempPos.y))
-    //         {
-    //             MacUILib_printf("%c", tempPos.symbol);
-    //         }
-
-    //         else
-    //         {
-    //             MacUILib_printf(" ");
-    //         }
-
-    //     }
-    //     MacUILib_printf("\n");
-    // }
 
 }
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(DELAY_CONST); // 0.1s delay %d\n",myGM->getScore()
+    MacUILib_Delay(DELAY_CONST); 
 }
 
 
