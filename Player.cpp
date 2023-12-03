@@ -29,9 +29,9 @@ objPosArrayList* Player::getPlayerPos()
 void Player::updatePlayerDir()
 {   
     
-    switch(mainGameMechsRef->getInput())
+    switch(mainGameMechsRef->getInput())       //The input logic transplanted from PPA, but now in OOD manner.
         {                      
-            case 27:  
+            case 27:         //ESC key for easy exit
                 mainGameMechsRef->setExitTrue();
                 break;
 
@@ -76,6 +76,7 @@ void Player::movePlayer()
     objPos currentHead;
     playerPosList->getHeadElement(currentHead);
     
+    // applying movement of player according to input, just like in PPA
     switch (myDir)
         {
         case UP:
@@ -105,7 +106,7 @@ void Player::movePlayer()
     int x_wrap, y_wrap;
     x_wrap=mainGameMechsRef->getBoardSizeX()-2;
     y_wrap=mainGameMechsRef->getBoardSizeY()-2;
-    if (currentHead.x>x_wrap)
+    if (currentHead.x>x_wrap)                       //wraparound logic transplanted from PPA
     {
         currentHead.x=currentHead.x%x_wrap;
     }
@@ -125,19 +126,19 @@ void Player::movePlayer()
         currentHead.y=currentHead.y+y_wrap;
     }
 
-    playerPosList->insertHead(currentHead);
+    playerPosList->insertHead(currentHead);          //This is the way how snake moves, insert head and remove tail.
     playerPosList->removeTail();
 }
 
  
 
-int Player::checkFoodConsumption(){
+int Player::checkFoodConsumption(){   //This is the upgraded version of checkFoodConsumption, it is able to distinguish special food eaten from normal food eaten, and award different score&body length.
     objPos temp_head;
     objPos temp_food;
     objPosArrayList* temp_foodlist;
     temp_foodlist=mainGameMechsRef->getFoodlistPos();
     playerPosList->getHeadElement(temp_head);
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 1; i++)    //This checks if the special food was eaten, if yes, return 1.
     {   
         temp_foodlist->getElement(temp_food,i);
         if (temp_head.x==temp_food.x&&temp_head.y==temp_food.y)
@@ -146,7 +147,7 @@ int Player::checkFoodConsumption(){
         }
     }
 
-    for (int i = 1; i < 5; i++)
+    for (int i = 1; i < 5; i++)   //This checks if the normal food was eaten, if yes, return 2.
     {   
         temp_foodlist->getElement(temp_food,i);
         if (temp_head.x==temp_food.x&&temp_head.y==temp_food.y)
@@ -164,7 +165,7 @@ void Player::increasePlayerLength(){
     playerPosList->insertHead(currentHead);
 }
 
-bool Player::checkSelfCollision(){
+bool Player::checkSelfCollision(){  // checking for collision with snake's own body
     objPos temp_Body;
     objPos currentHead;
     playerPosList->getHeadElement(currentHead);
@@ -172,10 +173,10 @@ bool Player::checkSelfCollision(){
     for (int k = 3; k < playerPosList->getSize(); k++)
     {   
         playerPosList->getElement(temp_Body,k);
-        if (temp_Body.x==currentHead.x&&temp_Body.y==currentHead.y)
+        if (temp_Body.x==currentHead.x&&temp_Body.y==currentHead.y)//in this for loop, it will detect whether snake head touches any part of snake body.
     {   
-        mainGameMechsRef->setLoseFlag();
-        mainGameMechsRef->setExitTrue();
+        mainGameMechsRef->setLoseFlag();  //"You lost" signal, differentiated from game exit by ESC.
+        mainGameMechsRef->setExitTrue();  //Game over signal
     }
     }
 

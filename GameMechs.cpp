@@ -124,9 +124,9 @@ void GameMechs::incrementScore()
     score++;
 }
 
-void GameMechs::generateFood(objPosArrayList* blockOff)
+void GameMechs::generateFood(objPosArrayList* blockOff)        //Very important function for generating foods, without overlapping with snake, game board frame, or other foods.
 {       
-        srand(time(NULL));
+        srand(time(NULL));       //RNG seeding
         int xRange = boardSizeX;
         int yRange = boardSizeY;
         bool flagy;
@@ -138,12 +138,12 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
         objPosArrayList* tempFoodlist;
         
 
-        while (count<4)       
+        while (count<4)              //generates 4 normal foods
         {    
             flagy=false;
             int myRandomX = (rand() % (xRange-2)) + 1;
             int myRandomY = (rand() % (yRange-2)) + 1;
-            for (int k = 0; k < blockOff->getSize(); k++)
+            for (int k = 0; k < blockOff->getSize(); k++)       //loops through the blockOff, in other words, the snake, to avoid spawning any food on snake.
             {
                 blockOff->getElement(tempBody,k);
                 if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
@@ -154,7 +154,7 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
             }
            
             
-            for ( int j = 0; j <count; j++)
+            for ( int j = 0; j <count; j++)       //loops through the foods that have already been spawned, so the new food wont spawn on and overlap with old foods
             {
                 foodBucket->getElement(tempFood,j);
                 if(tempFood.x==myRandomX&&tempFood.y==myRandomY)
@@ -165,22 +165,22 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
                 }
             }
             
-            if (flagy==false)
+            if (flagy==false)       //only qualified RNG will be used
             {
                 tempFood.setObjPos(myRandomX, myRandomY, 'o');
                 foodBucket->insertHead(tempFood);
                 foodBucket->removeTail();
-                count++;
+                count++;       //keeps while loop going until having enough qualified RNG.
             }
             
         }
 
-        while (flagy_special)
+        while (flagy_special)       //This part is for generating the special food
         {   
             flagy_special=false;
             int myRandomX = (rand() % (xRange-2)) + 1;
             int myRandomY = (rand() % (yRange-2)) + 1;
-            for (int k = 0; k < blockOff->getSize(); k++)
+            for (int k = 0; k < blockOff->getSize(); k++)      //loops through the blockOff, in other words, the snake, to avoid spawning any food on snake.
             {
                 blockOff->getElement(tempBody,k);
                 if (tempBody.x==myRandomX&&tempBody.y==myRandomY)
@@ -190,7 +190,7 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
                 }     
             }
 
-            for ( int j = 0; j <count; j++)
+            for ( int j = 0; j <count; j++)             //loops through the foods that have already been spawned, so the special food wont spawn on and overlap with old normal foods
             {
                 foodBucket->getElement(tempFood,j);
                 if(tempFood.x==myRandomX&&tempFood.y==myRandomY)
@@ -203,8 +203,8 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
 
             if (flagy_special==false)
             {
-                tempFood.setObjPos(myRandomX, myRandomY, '$');
-                foodBucket->insertHead(tempFood);
+                tempFood.setObjPos(myRandomX, myRandomY, '$');          //differentiate special food with symbol $.
+                foodBucket->insertHead(tempFood);          //The special food is placed at the head of arraylist, making it convenient for checking if snake eats the special food later.
                 foodBucket->removeTail();
                 count++;
             }
