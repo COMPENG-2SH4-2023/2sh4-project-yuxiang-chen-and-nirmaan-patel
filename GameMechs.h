@@ -44,7 +44,8 @@ class GameMechs
         int getBoardSizeY();
 
         void incrementScore();
-
+        
+        // Additional Functions for Food Generation
         void generateFood(objPosArrayList* blockOff);
         
         objPosArrayList* getFoodlistPos();
