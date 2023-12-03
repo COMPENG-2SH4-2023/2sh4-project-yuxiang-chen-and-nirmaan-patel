@@ -1,7 +1,7 @@
 #ifndef OBJPOS_ARRAYLIST_H
 #define OBJPOS_ARRAYLIST_H
 
-#define ARRAY_MAX_CAP 2000 //Subject to change as needed
+#define ARRAY_MAX_CAP 200 //Subject to change as needed
 
 #include "objPos.h"
 
