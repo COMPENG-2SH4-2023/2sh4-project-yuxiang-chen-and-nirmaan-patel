@@ -51,7 +51,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    myGM=new GameMechs(56,26);               //initialization of pointers on heap, will be deallocated at the end of program.
+    myGM=new GameMechs(44,20);               //initialization of pointers on heap, will be deallocated at the end of program.
     myPlayer=new Player(myGM);               //myPlayer gets the reference from GameMechs, ie, myGM.
     
     objPosArrayList* playerBody=myPlayer->getPlayerPos(); 
